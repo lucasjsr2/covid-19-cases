@@ -1,0 +1,21 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "covid",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {},
+  "linuxAndroidStudioPath": "/home/devlucas/android-studio/bin/studio.sh",
+  "backgroundColor": "#f0f0f5",
+  "server": {
+    "url": "http://192.168.1.106:8100",
+    "cleartext": true,
+    "originalUrl": "http://192.168.1.106:8200",
+    "originalCleartext": true
+  }
+}

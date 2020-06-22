@@ -1,0 +1,27 @@
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.225px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.selector {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: url(https://image.flaticon.com/icons/svg/271/271210.svg) no-repeat
+    #e7e7ec;
+  background-position: 92% center;
+  background-size: 16px;
+  margin-top: 8px;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #313131;
+  outline: 0;
+}
+
+
