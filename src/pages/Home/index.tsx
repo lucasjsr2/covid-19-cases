@@ -1,22 +1,38 @@
-import { IonContent, IonApp } from "@ionic/react";
-import React from "react";
-import "./styles.css";
-
+import React from 'react';
+import { IonContent, IonPage, IonSpinner, IonText } from '@ionic/react';
 import Header from '../../components/Header';
-import SelectorState from '../../components/SelectorState';
-import Cards from '../../components/Cards/';
+import StateSelector from '../../components/SelectorState';
+import Cards from '../../components/Cards';
+import { useCovid } from '../../contexts/data';
+import './styles.css';
 
 const Home: React.FC = () => {
+  const { isLoading, error } = useCovid();
+
   return (
-    <IonApp>
-      <IonContent>
+    <IonPage>
+      <IonContent fullscreen>
         <Header />
-        <div className="container">
-          <SelectorState />
-          <Cards />
+        <div className="home-content">
+          {isLoading && (
+            <div className="loading-container">
+              <IonSpinner name="crescent" />
+            </div>
+          )}
+          {error && (
+            <IonText color="danger">
+              <p className="error-text">{error}</p>
+            </IonText>
+          )}
+          {!isLoading && !error && (
+            <>
+              <StateSelector />
+              <Cards />
+            </>
+          )}
         </div>
       </IonContent>
-    </IonApp>
+    </IonPage>
   );
 };
 

@@ -1,66 +1,40 @@
-import React, { useEffect, useState, createContext, ChangeEvent, useContext } from 'react';
-import * as api from '../services/api';
-
-interface CovidData {
-  uid: number;
-  uf: string;
-  state: string;
-  cases: number;
-  deaths: number;
-  suspects: number;
-  refuses: number;
-  datetime: string;
-};
-
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { fetchCovidData } from '../services/api';
+import { StateData } from '../types';
 
 interface CovidContextData {
-  dados: CovidData[];
+  stateData: StateData[];
   selectedState: string;
-  handleSelectedState(e: ChangeEvent<HTMLSelectElement>): void;
+  isLoading: boolean;
+  error: string | null;
+  setSelectedState: (state: string) => void;
 }
 
 const CovidContext = createContext<CovidContextData>({} as CovidContextData);
 
-export const DataProvider: React.FC = ({ children }) => {
-  const [dados, setDados] = useState<CovidData[]>([]);
-  const [selectedState, setSelectedState] = useState("Acre");
+export const CovidProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [stateData, setStateData] = useState<StateData[]>([]);
+  const [selectedState, setSelectedState] = useState('Acre');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function Data() {
-      const response = await api.getDataCovid();
-  
-      // Ordena os estados em ordem alfabética
-      const ordenado = response.data.data.sort((a: CovidData, b: CovidData) => {
-        return a.state < b.state ? -1 : (a.state > b.state) ? 1 : 0;
-      });
-      
-      setDados(ordenado);
-    }
-    Data();
-  },[])
-
-
-  function handleSelectedState(e: ChangeEvent<HTMLSelectElement>) {
-    const uf = e.target.value;
-
-    setSelectedState(uf);
-  }
+    fetchCovidData()
+      .then((data) => {
+        const sorted = [...data].sort((a, b) => a.state.localeCompare(b.state));
+        setStateData(sorted);
+      })
+      .catch(() => setError('Falha ao carregar dados. Tente novamente mais tarde.'))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   return (
-    <CovidContext.Provider
-      value={{
-        dados,
-        handleSelectedState,
-        selectedState
-      }}
-    >
+    <CovidContext.Provider value={{ stateData, selectedState, setSelectedState, isLoading, error }}>
       {children}
     </CovidContext.Provider>
-  )
-}
+  );
+};
 
-export default function useCovid() {
-  const context = useContext(CovidContext);
-
-  return context;
+export function useCovid(): CovidContextData {
+  return useContext(CovidContext);
 }

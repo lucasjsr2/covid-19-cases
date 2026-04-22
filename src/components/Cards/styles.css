@@ -1,32 +1,88 @@
-.card-cases {
-  margin-top: 24px;
+.stats-container {
+  padding: 8px 16px 32px;
 }
 
-.card-row + .card-row {
-  margin-top: 32px;
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-.card {
-  margin: 0;
-  padding: 16px 0px;
-  border-radius: 12px;
-}
-
-.title-case {
-  font-size: 16px;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.815);
-  letter-spacing: 0.225px;
-  line-height: 22px;
-}
-
-.number-case {
-  font-size: 42px;
-}
-
-.col-card {
+.stat-card {
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 20px 12px;
+  border-radius: 16px;
+  background: var(--ion-card-background, #ffffff);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  gap: 6px;
+  transition: transform 0.15s ease;
+}
+
+.stat-card:active {
+  transform: scale(0.97);
+}
+
+.stat-icon {
+  font-size: 26px;
+}
+
+.stat-value {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--ion-text-color, #1a1a1a);
+  opacity: 0.55;
+  text-transform: uppercase;
+}
+
+/* WCAG AA accessible colors on white (contrast ≥ 4.5:1) */
+.stat--confirmed .stat-icon,
+.stat--confirmed .stat-value { color: #b45309; }
+
+.stat--deaths .stat-icon,
+.stat--deaths .stat-value { color: #b91c1c; }
+
+.stat--suspects .stat-icon,
+.stat--suspects .stat-value { color: #1d4ed8; }
+
+.stat--recovered .stat-icon,
+.stat--recovered .stat-value { color: #15803d; }
+
+/* Dark mode — lighter tones for contrast on dark bg */
+@media (prefers-color-scheme: dark) {
+  .stat-card {
+    background: #1e1e2e;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .stat--confirmed .stat-icon,
+  .stat--confirmed .stat-value { color: #fbbf24; }
+
+  .stat--deaths .stat-icon,
+  .stat--deaths .stat-value { color: #f87171; }
+
+  .stat--suspects .stat-icon,
+  .stat--suspects .stat-value { color: #60a5fa; }
+
+  .stat--recovered .stat-icon,
+  .stat--recovered .stat-value { color: #4ade80; }
+}
+
+.stats-updated {
+  text-align: center;
+  font-size: 11px;
+  opacity: 0.4;
+  margin-top: 16px;
+  letter-spacing: 0.2px;
 }

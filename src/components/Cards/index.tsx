@@ -1,64 +1,79 @@
-import React from 'react';
-import { IonCard, IonRow, IonCol, IonLabel, IonGrid } from '@ionic/react';
+import React, { useMemo } from 'react';
+import { IonIcon } from '@ionic/react';
+import {
+  trendingUpOutline,
+  alertCircleOutline,
+  helpCircleOutline,
+  checkmarkCircleOutline,
+} from 'ionicons/icons';
+import { useCovid } from '../../contexts/data';
+import { StateData } from '../../types';
 import './styles.css';
-import useCovid from '../../contexts/data';
+
+interface StatItem {
+  label: string;
+  value: number;
+  colorClass: string;
+  icon: string;
+}
+
+function buildStats(data: StateData): StatItem[] {
+  return [
+    {
+      label: 'Confirmados',
+      value: data.cases,
+      colorClass: 'stat--confirmed',
+      icon: trendingUpOutline,
+    },
+    {
+      label: 'Mortes',
+      value: data.deaths,
+      colorClass: 'stat--deaths',
+      icon: alertCircleOutline,
+    },
+    {
+      label: 'Suspeitos',
+      value: data.suspects,
+      colorClass: 'stat--suspects',
+      icon: helpCircleOutline,
+    },
+    {
+      label: 'Recuperados',
+      value: data.refuses,
+      colorClass: 'stat--recovered',
+      icon: checkmarkCircleOutline,
+    },
+  ];
+}
 
 const Cards: React.FC = () => {
-  const { dados, selectedState } = useCovid();
+  const { stateData, selectedState } = useCovid();
+
+  const currentState = useMemo(
+    () => stateData.find((s) => s.state === selectedState),
+    [stateData, selectedState]
+  );
+
+  if (!currentState) return null;
+
+  const stats = buildStats(currentState);
 
   return (
-    <div className="card-cases">
-      <IonGrid>
-        <IonCard className="card">
-          <IonRow className="card-row">
-            {dados
-              .filter((dado) => dado.state === selectedState)
-              .map((stateFiltered) => (
-                <IonCol key={stateFiltered.uid} className="col-card">
-                  <IonLabel color="warning" className="number-case">
-                    {stateFiltered.cases.toLocaleString('pt-BR')}
-                  </IonLabel>
-                  <IonLabel className="title-case">Confirmados</IonLabel>
-                </IonCol>
-              ))}
-
-            {dados
-              .filter((dado) => dado.state === selectedState)
-              .map((stateFiltered) => (
-                <IonCol key={stateFiltered.uid} className="col-card">
-                  <IonLabel color="danger" className="number-case">
-                    {stateFiltered.deaths.toLocaleString('pt-BR')}
-                  </IonLabel>
-                  <IonLabel className="title-case">Mortes</IonLabel>
-                </IonCol>
-              ))}
-          </IonRow>
-
-          <IonRow className="card-row">
-            {dados
-              .filter((dado) => dado.state === selectedState)
-              .map((stateFiltered) => (
-                <IonCol key={stateFiltered.uid} className="col-card">
-                  <IonLabel color="secondary" className="number-case">
-                    {stateFiltered.suspects.toLocaleString('pt-BR')}
-                  </IonLabel>
-                  <IonLabel className="title-case">Suspeitos</IonLabel>
-                </IonCol>
-              ))}
-
-            {dados
-              .filter((dado) => dado.state === selectedState)
-              .map((stateFiltered) => (
-                <IonCol key={stateFiltered.uid} className="col-card">
-                  <IonLabel color="success" className="number-case">
-                    {stateFiltered.refuses.toLocaleString('pt-BR')}
-                  </IonLabel>
-                  <IonLabel className="title-case">Recuperados</IonLabel>
-                </IonCol>
-              ))}
-          </IonRow>
-        </IonCard>
-      </IonGrid>
+    <div className="stats-container">
+      <div className="stats-grid">
+        {stats.map(({ label, value, colorClass, icon }) => (
+          <div key={label} className={`stat-card ${colorClass}`}>
+            <IonIcon icon={icon} className="stat-icon" aria-hidden="true" />
+            <span className="stat-value">{value.toLocaleString('pt-BR')}</span>
+            <span className="stat-label">{label}</span>
+          </div>
+        ))}
+      </div>
+      {currentState.datetime && (
+        <p className="stats-updated">
+          Atualizado em {new Date(currentState.datetime).toLocaleDateString('pt-BR')}
+        </p>
+      )}
     </div>
   );
 };

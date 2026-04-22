@@ -1,0 +1,56 @@
+.ss-trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--ion-color-light, #f4f5f8);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ss-trigger:active {
+  opacity: 0.7;
+}
+
+.ss-trigger-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--ion-text-color, #1a1a1a);
+  opacity: 0.5;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ss-trigger-value {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ion-text-color, #1a1a1a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ss-trigger-chevron {
+  font-size: 14px;
+  color: var(--ion-text-color, #1a1a1a);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+.ss-item-selected {
+  --background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.07);
+}
+
+.ss-empty {
+  text-align: center;
+  padding: 48px 24px;
+  font-size: 14px;
+  opacity: 0.5;
+}

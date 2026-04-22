@@ -1,26 +1,20 @@
 import React from 'react';
-import { IonReactRouter } from '@ionic/react-router';
-import { IonRouterOutlet, IonApp } from '@ionic/react';
-import { Route, Redirect } from 'react-router';
-
+import { IonApp } from '@ionic/react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { CovidProvider } from './contexts/data';
 import Home from './pages/Home';
-import { DataProvider } from './contexts/data';
 
+const AppRoutes: React.FC = () => (
+  <CovidProvider>
+    <IonApp>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route path="*" element={<Navigate to="/home" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </IonApp>
+  </CovidProvider>
+);
 
-const Routes = () => {
-  return (
-    <DataProvider>
-      <IonApp>
-        <IonReactRouter>
-          <IonRouterOutlet>
-            <Route path="/home" component={Home} exact={true} />
-            <Route exact path="/" render={() => <Redirect to="/home" />} />
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonApp>
-    </DataProvider>
-    
-  );
-};
-
-export default Routes;
+export default AppRoutes;

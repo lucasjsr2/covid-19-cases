@@ -1,29 +1,29 @@
 import React from 'react';
-import { IonGrid, IonRow, IonCol } from '@ionic/react';
+import { useCovid } from '../../contexts/data';
+import SearchableSelect from '../SearchableSelect';
 import './styles.css';
-import useCovid from '../../contexts/data';
 
-const SelectorState: React.FC = () => {
-  const { dados, selectedState, handleSelectedState } = useCovid();
+const StateSelector: React.FC = () => {
+  const { stateData, selectedState, setSelectedState } = useCovid();
+
+  const options = stateData.map((item) => ({
+    key: item.uid,
+    value: item.state,
+    label: item.state,
+  }));
 
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol className="container-selector">
-          <span className="title">Escolha um estado</span>
+    <div className="selector-container">
+      <SearchableSelect
+        options={options}
+        value={selectedState}
+        onChange={setSelectedState}
+        label="Estado"
+        searchPlaceholder="Buscar estado..."
+        modalTitle="Selecionar Estado"
+      />
+    </div>
+  );
+};
 
-          <div className="state">
-            <select onChange={handleSelectedState} value={selectedState} className="selector" name="state" id="state">
-              {dados.map((estado) => (
-                <option key={estado.uid} value={estado.state}>{estado.state}</option>
-              ))}
-            </select>
-          </div>
-          
-        </IonCol>
-      </IonRow>
-    </IonGrid>
-  )
-}
-
-export default SelectorState;
+export default StateSelector;
